@@ -1,9 +1,9 @@
-import { useContext, useState, useEffect } from "react";
+import { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 
 // Import keperluan untuk halaman ini
 import { UserContext } from "../hooks/UserContext";
-import { mockPosts } from "../constant";
+import useFetch from "../hooks/useFetch";
 
 // Import component yang dibutuhkan
 import DashboardSummary from "../components/DashboardSummary";
@@ -11,10 +11,13 @@ import { Layout } from "../components/layout/Layout";
 import PostCard from "../components/PostCard";
 
 const DashboardPage = () => {
+  const url = import.meta.env.VITE_API_URL;
+
   // Inisiasi beberapa state
-  const [posts, setPosts] = useState([]);
   const { user, setUser } = useContext(UserContext);
   const { totalPoints, totalPosts } = user;
+
+  const {data, loading, error} = useFetch(`${url}/posts`)
 
   // Function untuk mengambil hadiah jika point >= 1000
   const handleRedeemPoints = () => {
@@ -25,11 +28,6 @@ const DashboardPage = () => {
     }));
     alert("You have redeemed 1000 points for Rp100,000!");
   };
-
-  // Mengisi nilai post ketika halaman dimuat
-  useEffect(() => {
-    setPosts(mockPosts);
-  }, []);
 
   return (
     <Layout>
@@ -59,18 +57,18 @@ const DashboardPage = () => {
           Redeem Points for Rp100,000
         </button>
       </section>
-      {posts.length === 0 ? (
+      {loading ? (
         <div className="mt-7 flex justify-center items-center">
           <p className="text-xl text-gray-500">Loading...</p>
         </div>
       ) : (
         <div className="w-full mt-7 flex lg:flex-row flex-col justify-between gap-8">
-          {posts.slice(0, 3).map((post) => (
+          {data.slice(0, 3).map((post) => (
             <PostCard
               key={post.id}
-              image={post.image}
-              category={post.category}
-              description={post.description}
+              image={post.image_url}
+              category={post.categories}
+              description={post.title}
               action={false}
               onDelete={() => handleDelete(post.id)}
               onUpdate={() => {

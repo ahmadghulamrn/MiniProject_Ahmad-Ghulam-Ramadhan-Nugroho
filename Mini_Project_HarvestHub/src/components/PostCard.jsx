@@ -7,7 +7,7 @@ const PostCard = ({
   action = true,
 }) => {
   return (
-    <div className="bg-white w-full rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:cursor-pointer">
+    <div className="bg-white w-72 rounded-lg shadow-lg overflow-hidden transform transition-transform duration-300 hover:scale-105 hover:shadow-xl hover:cursor-pointer">
       {/* Gambar */}
       <img src={image} alt={category} className="w-full h-48 object-cover" />
 
